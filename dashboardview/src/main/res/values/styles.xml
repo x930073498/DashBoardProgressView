@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DashBoardProgressView">
+        <attr name="progress" format="float" />
+        <attr name="max" format="float" />
+        <attr name="startAngle" format="float" />
+        <attr name="endAngle" format="float" />
+        <attr name="dashMargin" format="dimension" />
+        <attr name="textMargin" format="dimension" />
+        <attr name="progressColor" format="color" />
+        <attr name="baseColor" format="color" />
+        <attr name="dashColor" format="color" />
+        <attr name="progressText" format="string" />
+        <attr name="description" format="string" />
+        <attr name="progressTextSize" format="dimension" />
+        <attr name="descriptionTextSize" format="dimension" />
+        <attr name="progressLineWidth" format="dimension" />
+        <attr name="dashLineWidth" format="dimension" />
+        <attr name="baseLineWidth" format="dimension" />
+        <attr name="progressLongLength" format="dimension" />
+        <attr name="progressShortLength" format="dimension" />
+        <attr name="dashLongLength" format="dimension" />
+        <attr name="dashShortLength" format="dimension" />
+        <attr name="baseLongLength" format="dimension" />
+        <attr name="baseShortLength" format="dimension" />
+        <attr name="descriptionColor" format="color" />
+        <attr name="progressTextColor" format="color" />
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+
+</resources>
