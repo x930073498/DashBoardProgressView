@@ -180,6 +180,8 @@ public class DashBoardProgressView extends View {
         colorDescription = typedArray.getColor(R.styleable.DashBoardProgressView_descriptionColor, colorDescription);
         colorProgressText = typedArray.getColor(R.styleable.DashBoardProgressView_progressTextColor, colorProgressText);
         colorBackground = typedArray.getColor(R.styleable.DashBoardProgressView_backgroundColor, colorBackground);
+        numberProgress = typedArray.getInt(R.styleable.DashBoardProgressView_countProgress, numberProgress);
+        numberDash = typedArray.getInt(R.styleable.DashBoardProgressView_countDash, numberDash);
         typedArray.recycle();
         max = Math.abs(max);
         progress = Math.abs(progress);
@@ -491,6 +493,21 @@ public class DashBoardProgressView extends View {
         postInvalidate();
     }
 
+    public void setProgressCount(int count) {
+        this.numberProgress = count;
+        calculateProgressNumber();
+        calculateCenterProgressIndex();
+        calculateProgressIndex();
+        calculateProgressUnitAngle();
+        postInvalidate();
+    }
+
+    public void setDashCount(int count) {
+        this.numberDash = count;
+        calculateDashUnitAngle();
+        postInvalidate();
+    }
+
     public void setDescriptionProvider(DescriptionProvider descriptionProvider) {
         this.descriptionProvider = descriptionProvider;
     }
@@ -589,8 +606,6 @@ public class DashBoardProgressView extends View {
     }
 
     private CharSequence getDescription(float progress) {
-        ArgbEvaluator evaluator = new ArgbEvaluator();
-
         if (descriptionProvider != null) return descriptionProvider.provideDescription(progress);
         return description;
     }

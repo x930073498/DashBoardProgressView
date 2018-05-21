@@ -26,6 +26,8 @@
         <attr name="descriptionColor" format="color" />
         <attr name="progressTextColor" format="color" />
         <attr name="backgroundColor" format="color" />
+        <attr name="countProgress" format="integer" />
+        <attr name="countDash" format="integer" />
     </declare-styleable>
 
 </resources>
