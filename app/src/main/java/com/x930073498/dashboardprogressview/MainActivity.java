@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.x930073498.dashboardview.DashBoardProgressView;
 
-public class MainActivity extends AppCompatActivity implements DashBoardProgressView.DescriptionProvider, DashBoardProgressView.ProgressTextProvider, DashBoardProgressView.BackgroundColorProvider {
+public class MainActivity extends AppCompatActivity implements DashBoardProgressView.DescriptionProvider, DashBoardProgressView.ProgressTextProvider, DashBoardProgressView.BackgroundColorProvider, DashBoardProgressView.LongProgressIndexProvider {
 
     private static final String TAG = "MainActivity";
 
@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity implements DashBoardProgress
         view.setOnClickListener((v) -> animate(progressView));
         progressView.setDescriptionProvider(this);
         progressView.setProgressTextProvider(this);
-        progressView.setBackgroundColorProvider(this);
+        progressView.setLongProgressIndexProvider(this);
+//        progressView.setBackgroundColorProvider(this);
     }
 
     private void animate(DashBoardProgressView progressView) {
@@ -52,10 +53,15 @@ public class MainActivity extends AppCompatActivity implements DashBoardProgress
 
     @Override
     public int provideBackgroundColor(Context context, float progress) {
-        if (progress<20)return ContextCompat.getColor(context,R.color.aqua);
-        if (progress<40)return  ContextCompat.getColor(context,R.color.cyan);
-        if (progress<60)return ContextCompat.getColor(context,R.color.springgreen);
-        if (progress<80)return ContextCompat.getColor(context,R.color.lime);
-        return ContextCompat.getColor(context,R.color.mediumspringgreen);
+        if (progress < 20) return ContextCompat.getColor(context, R.color.aqua);
+        if (progress < 40) return ContextCompat.getColor(context, R.color.cyan);
+        if (progress < 60) return ContextCompat.getColor(context, R.color.springgreen);
+        if (progress < 80) return ContextCompat.getColor(context, R.color.lime);
+        return ContextCompat.getColor(context, R.color.mediumspringgreen);
+    }
+
+    @Override
+    public int provideIndex(float max, float progress, int numberProgress, int progressIndex) {
+        return progressIndex;
     }
 }

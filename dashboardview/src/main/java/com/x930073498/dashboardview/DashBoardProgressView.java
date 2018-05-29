@@ -99,7 +99,7 @@ public class DashBoardProgressView extends View {
     //progress刻度总数
     private int numberProgress = 47;
     //progress刻度中间位置
-    private int centerIndex;
+    private int longProgressIndex;
     //progress刻度的角度间隔
     private double unitProgressAngle;
     //progress 对应的刻度位置
@@ -124,6 +124,8 @@ public class DashBoardProgressView extends View {
     private ProgressTextProvider progressTextProvider;
 
     private BackgroundColorProvider backgroundColorProvider;
+
+    private LongProgressIndexProvider longProgressIndexProvider;
     private int mPadding;
 
     private ArrayMap<Float, Integer> colors = new ArrayMap<>();
@@ -198,8 +200,8 @@ public class DashBoardProgressView extends View {
     private void initData() {
         calculateSize();
         calculateProgressNumber();
-        calculateCenterProgressIndex();
         calculateProgressIndex();
+        calculateLongProgressIndex();
         calculateProgressUnitAngle();
         calculateDashUnitAngle();
         calculateBackgroundColor();
@@ -319,18 +321,19 @@ public class DashBoardProgressView extends View {
     private void drawProgress(Canvas canvas) {
         for (int i = 0; i < numberProgress; i++) {
             if (i <= progressIndex && progress != 0) {
-                if (i == centerIndex) {
+                if (i == longProgressIndex) {
                     drawArcOuterLine(canvas, mCenter, progressRadius, (float) (angleStart + i * unitProgressAngle), longProgressLength, mProgressPaint);
                 } else
                     drawArcOuterLine(canvas, mCenter, progressRadius, (float) (angleStart + i * unitProgressAngle), shortProgressLength, mProgressPaint);
             } else {
-                if (i == centerIndex) {
-                    drawArcOuterLine(canvas, mCenter, progressRadius, (float) (angleStart + i * unitProgressAngle), longBaseLength, basePaint);
-                } else
-                    drawArcOuterLine(canvas, mCenter, progressRadius, (float) (angleStart + i * unitProgressAngle), shortBaseLength, basePaint);
+//                if (i == longProgressIndex) {
+//                    drawArcOuterLine(canvas, mCenter, progressRadius, (float) (angleStart + i * unitProgressAngle), longBaseLength, basePaint);
+//                } else
+                drawArcOuterLine(canvas, mCenter, progressRadius, (float) (angleStart + i * unitProgressAngle), shortBaseLength, basePaint);
             }
         }
     }
+
 
     private int calculateProgressIndex() {
         progressIndex = (int) (numberProgress * calculateProgress());
@@ -345,12 +348,14 @@ public class DashBoardProgressView extends View {
     public void setProgress(float progress) {
         this.progress = Math.abs(progress);
         calculateProgressIndex();
+        calculateLongProgressIndex();
         postInvalidate();
     }
 
     public void setMax(float max) {
         this.max = Math.abs(max);
         calculateProgressIndex();
+        calculateLongProgressIndex();
         postInvalidate();
     }
 
@@ -504,13 +509,20 @@ public class DashBoardProgressView extends View {
         this.backgroundColorProvider = backgroundColorProvider;
     }
 
+    public void setLongProgressIndexProvider(LongProgressIndexProvider longProgressIndexProvider) {
+        this.longProgressIndexProvider = longProgressIndexProvider;
+    }
+
+
     private int calculateProgressNumber() {
         if (numberProgress % 2 == 0) numberProgress++;
         return numberProgress;
     }
 
-    private int calculateCenterProgressIndex() {
-        return centerIndex = (numberProgress) / 2;
+    private int calculateLongProgressIndex() {
+        if (longProgressIndexProvider != null)
+            return longProgressIndex = longProgressIndexProvider.provideIndex(max, progress, numberProgress, progressIndex);
+        return longProgressIndex = (numberProgress) / 2;
     }
 
     private double calculateProgressUnitAngle() {
@@ -589,7 +601,6 @@ public class DashBoardProgressView extends View {
     }
 
     private CharSequence getDescription(float progress) {
-        ArgbEvaluator evaluator = new ArgbEvaluator();
 
         if (descriptionProvider != null) return descriptionProvider.provideDescription(progress);
         return description;
@@ -627,6 +638,10 @@ public class DashBoardProgressView extends View {
     public interface BackgroundColorProvider {
         @ColorInt
         int provideBackgroundColor(Context context, float progress);
+    }
+
+    public interface LongProgressIndexProvider {
+        int provideIndex(float max, float progress, int numberProgress, int progressIndex);
     }
 
 }
